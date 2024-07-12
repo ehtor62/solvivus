@@ -291,7 +291,7 @@ const handleAddressChange = (
               )}
             </div>
             {showDropdown && (
-              <div className="mb-4">
+              <div className="flex flex-col lg:flex-row mb-4 space-y-4 lg:space-y-0 lg:space-x-4 max-w-full">
                 <select
                   value={selectedAddress || dropdownValue}
                   onChange={(event) => handleAddressChange(event)}
