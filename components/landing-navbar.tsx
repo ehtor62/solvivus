@@ -20,7 +20,13 @@ export const LandingNavbar = () => {
 		<nav className='p-4 bg-transparent flex items-center justify-between'>
 			<Link href='/' className='flex items-center'>
 				<div className='relative h-8 w-8 mr-4'>
-					<Image fill alt='Logo' src='/Solvivus.png' />
+					<Image
+                    				//fill
+                    				alt="Logo"
+                    				src="/SolVivus.png"
+                    				width={52}  // example width, adjust as needed
+                    				height={52} // example height, adjust as needed
+                			/>
 				</div>
 				<h1 className={cn('text-2xl font-bold text-white', font.className)}>
 					Solvivus
