@@ -11,7 +11,7 @@ interface SubscriptionButtonProps {
 }
 
 export const SubscriptionButton = ({
-	isPro = false
+	isPro
 }: SubscriptionButtonProps) => {
     const [loading, setLoading] = useState(false);
 	const onClick = async () => {
