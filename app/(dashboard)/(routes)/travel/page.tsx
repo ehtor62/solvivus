@@ -21,6 +21,7 @@ import { BotAvatar } from "@/components/bot-avatar"
 import questionWords from "./questionWords"
 import { useProModal } from '@/hooks/use-pro-modal';
 import toast from 'react-hot-toast';
+import { Textarea } from '@/components/ui/textarea';
 
 const GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
 
@@ -134,7 +135,7 @@ const CodePage = () => {
 
   const textContent = `${inputValue ? `${inputValue} ` : ''}${userInput}`;
 
-  const handleUserInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleUserInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newUserInput = event.target.value.trim();
     const exceedingSubstring = newUserInput.substring(inputValue.length).trim();
     if (!inputValue) {
@@ -291,7 +292,7 @@ const handleAddressChange = (
               )}
             </div>
             {showDropdown && (
-              <div className="mb-4">
+              <div className="flex flex-col lg:flex-row mb-4 space-y-4 lg:space-y-0 lg:space-x-4 max-w-full">
                 <select
                   value={selectedAddress || dropdownValue}
                   onChange={(event) => handleAddressChange(event)}
@@ -326,7 +327,7 @@ const handleAddressChange = (
                 render={({ field }) => (
                   <FormItem className="col-span-12 lg:col-span-10">
                     <FormControl className="m-0 p-0">
-                      <Input
+                      <Textarea
                         className="border-0 outline-none focus-visible:ring-0 focus-visible:ring-transparent"
                         disabled={isLoading}
                         value={textContent}

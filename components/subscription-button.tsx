@@ -11,14 +11,14 @@ interface SubscriptionButtonProps {
 }
 
 export const SubscriptionButton = ({
-	isPro = false
+	isPro
 }: SubscriptionButtonProps) => {
     const [loading, setLoading] = useState(false);
 	const onClick = async () => {
 		try {
 			setLoading(true);
 			const response = await axios.get('/api/stripe');
-
+			
 			window.location.href = response.data.url;
 		} catch (error) {
 			toast.error('Something went wrong.');
