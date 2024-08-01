@@ -13,7 +13,7 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { useRouter } from "next/navigation"
 import { useState, useEffect } from "react"
-import { ChatCompletionMessageParam } from "openai/resources/chat/completions"
+import { ChatCompletionMessage } from "openai/resources/chat/completions"
 import { Empty } from "@/components/empty"
 import { cn } from "@/lib/utils"
 import { UserAvatar } from "@/components/user-avatar"
@@ -145,12 +145,12 @@ const CodePage = () => {
     }
   };
 
-// Function to handle address change from dropdown
-const handleAddressChange = (
-  event: React.ChangeEvent<HTMLSelectElement>
-) => {
-  setSelectedAddress(event.target.value);
-};
+  // Function to handle address change from dropdown
+  const handleAddressChange = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    setSelectedAddress(event.target.value);
+  };
 
   const fetchGeolocation = async () => {
     if ("geolocation" in navigator) {
@@ -161,8 +161,10 @@ const handleAddressChange = (
           const response = await axios.get(geocodeUrl);
           console.log("Result", response.data.results)
           const addressList = response.data.results.map((result: any) => result.formatted_address);
-          setAddresses(addressList);
-          const lengthHalfOrOne = Math.max(Math.floor(response.data.results.length / 2), 1);          
+          const startIndex = Math.ceil(addressList.length * 0.3);
+          const NewAddressList = addressList.slice(startIndex);
+          setAddresses(NewAddressList);
+          const lengthHalfOrOne = Math.max(Math.floor(response.data.results.length / 2), 1);
           const location = `in ${response.data.results[response.data.results.length - lengthHalfOrOne]?.formatted_address || "your current location"}`;
           setGeocodedLocation(location);
         } catch (error) {
@@ -177,7 +179,7 @@ const handleAddressChange = (
   };
 
   const router = useRouter()
-  const [messages, setMessages] = useState<ChatCompletionMessageParam[]>([])
+  const [messages, setMessages] = useState<ChatCompletionMessage[]>([])
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -207,13 +209,13 @@ const handleAddressChange = (
 
       if (includeLocation) {
         if (selectedAddress) {
-          finalPrompt = finalPrompt.replace(locationTerm, selectedAddress);
+          finalPrompt = finalPrompt.replace(locationTerm, `in ${selectedAddress}`);
         } else {
           finalPrompt = finalPrompt.replace(locationTerm, geocodedLocation);
         }
       }
-      
-      const userMessage: ChatCompletionMessageParam = {
+
+      const userMessage: ChatCompletionMessage = {
         role: "user",
         content: finalPrompt
       }
@@ -238,13 +240,13 @@ const handleAddressChange = (
       router.refresh();
     } catch (error: any) {
       //if (error instanceof AxiosError) {
-				if (error?.response?.status === 403) {
-					proModal.onOpen();
-				} else {
-					toast.error('Something went wrong');
-				}
-				console.log(error);
-			//}
+      if (error?.response?.status === 403) {
+        proModal.onOpen();
+      } else {
+        toast.error('Something went wrong');
+      }
+      console.log(error);
+      //}
     } finally {
       router.refresh();
     }
@@ -264,11 +266,11 @@ const handleAddressChange = (
 
         <div>
           <Form {...form}>
-            
-            <div className="flex flex-col lg:flex-row mb-4 space-y-4 lg:space-y-0 lg:space-x-4 max-w-full">
+
+            <div className="flex flex-col items-center lg:flex-row mb-4 space-y-4 lg:space-y-0 lg:space-x-4 max-w-full">
               {[uniqueLevel1Keys, uniqueLevel2Keys, uniqueLevel3Keys, uniqueLevel4Keys, uniqueLevel5Keys].map(
                 (keys, index) => (
-                  <div key={index}>
+                  <div key={index} className="w-full lg:w-auto flex justify-center">
                     <select
                       value={
                         newOptions[index]?.length === 1
@@ -276,7 +278,7 @@ const handleAddressChange = (
                           : selectedOptions[index] || "" // Otherwise, use selectedOptions
                       }
                       onChange={(event) => handleDropdownChange(event, index)}
-                      className={`rounded-xl ${newOptions[index]?.length === 1 ? 'bg-white' : 'bg-green-600 text-white'} text-center h-[3rem]`}
+                      className={`rounded-md ${newOptions[index]?.length === 1 ? 'bg-white' : 'bg-green-600 text-white'} text-center h-[3rem]`}
                     >
                       <option value="" disabled hidden>
                         {index === 0 ? "Question" : index === 1 ? "Perspective" : index === 2 ? "Attribute/Activity" : index === 3 ? "Object/Item" : "Location"}
@@ -333,7 +335,7 @@ const handleAddressChange = (
                         value={textContent}
                         placeholder="Create your question with the buttons above. Choose any order."
                         onChange={handleUserInputChange}
-                        //{...field}
+                      //{...field}
                       />
                     </FormControl>
                   </FormItem>
@@ -344,14 +346,14 @@ const handleAddressChange = (
               </Button>
             </form>
             <Button
-                    className='rounded-xl bg-white mt-4 text-green-600 border border-green-600 hover:text-white'
-                    onClick={resetOptions}
-                >
-                    Reset
+              className='rounded-xl bg-white mt-4 text-green-600 border border-green-600 hover:text-white'
+              onClick={resetOptions}
+            >
+              Reset
             </Button>
 
-            
-            
+
+
           </Form>
 
         </div>
@@ -366,7 +368,7 @@ const handleAddressChange = (
           )}
           <div className='flex flex-col-reverse gap-y-4'>
             {messages.map((message, index) => (
-              
+
               <div
                 key={index}
                 className={cn(
@@ -381,7 +383,7 @@ const handleAddressChange = (
                   {message.content?.toString()}
                 </div>
 
-      
+
               </div>
             ))}
           </div>

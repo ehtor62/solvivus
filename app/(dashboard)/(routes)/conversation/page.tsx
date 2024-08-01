@@ -2,7 +2,7 @@
 
 import axios, { AxiosError } from 'axios';
 import * as z from "zod"
-import {Loader} from "@/components/loader"
+import { Loader } from "@/components/loader"
 import { Heading } from "@/components/heading"
 import { MessagesSquare } from "lucide-react"
 import { useForm } from "react-hook-form"
@@ -13,7 +13,7 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
-import { ChatCompletionMessageParam } from "openai/resources/chat/completions"
+import { ChatCompletionMessage } from "openai/resources/chat/completions"
 import { Empty } from "@/components/empty"
 import { cn } from "@/lib/utils"
 import { UserAvatar } from "@/components/user-avatar"
@@ -26,7 +26,7 @@ import toast from 'react-hot-toast';
 const ConversationPage = () => {
   const proModal = useProModal();
   const router = useRouter()
-  const [messages, setMessages] = useState<ChatCompletionMessageParam[]>([])
+  const [messages, setMessages] = useState<ChatCompletionMessage[]>([])
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -37,10 +37,10 @@ const ConversationPage = () => {
   const isLoading = form.formState.isSubmitting
 
   const onSubmit = async (values: z.infer<typeof formSchema>
-	) => {
+  ) => {
     try {
-      
-      const userMessage: ChatCompletionMessageParam = {
+
+      const userMessage: ChatCompletionMessage = {
         role: "user",
         content: values.prompt
       }
@@ -53,13 +53,13 @@ const ConversationPage = () => {
       form.reset()
     } catch (error: any) {
       //if (error instanceof AxiosError) {
-				if (error?.response?.status === 403) {
-					proModal.onOpen();
-				} else {
-					toast.error('Something went wrong');
-				}
-				console.log(error);
-			//}
+      if (error?.response?.status === 403) {
+        proModal.onOpen();
+      } else {
+        toast.error('Something went wrong');
+      }
+      console.log(error);
+      //}
     } finally {
       router.refresh()
     }
@@ -94,7 +94,7 @@ const ConversationPage = () => {
             >
               <FormField
                 name="prompt"
-                render={({field}) => (
+                render={({ field }) => (
                   <FormItem className="col-span-12 lg:col-span-10">
                     <FormControl className="m-0 p-0">
                       <Input
@@ -106,7 +106,7 @@ const ConversationPage = () => {
                     </FormControl>
                   </FormItem>
                 )}
-              /> 
+              />
               <Button className="col-span-12 lg:col-span-2 w-full" disabled={isLoading}>
                 Get the answer
               </Button>
@@ -120,26 +120,26 @@ const ConversationPage = () => {
             </div>
           )}
           {messages.length === 0 && !isLoading && (
-            <Empty label="No conversation started" />  
+            <Empty label="No conversation started" />
           )}
-            <div className='flex flex-col-reverse gap-y-4'>
-						{messages.map((message, index) => (
-							<div
-								key={index}
-								className={cn(
-									'p-8 w-full flex items-start gap-x-8 rounded-lg',
-									message.role === 'user'
-										? 'bg-white border border-black/10'
-										: 'bg-muted'
-								)}
-							>
-								{message.role === 'user' ? <UserAvatar /> : <BotAvatar />}
-								<p className='text-sm'>
+          <div className='flex flex-col-reverse gap-y-4'>
+            {messages.map((message, index) => (
+              <div
+                key={index}
+                className={cn(
+                  'p-8 w-full flex items-start gap-x-8 rounded-lg',
+                  message.role === 'user'
+                    ? 'bg-white border border-black/10'
+                    : 'bg-muted'
+                )}
+              >
+                {message.role === 'user' ? <UserAvatar /> : <BotAvatar />}
+                <p className='text-sm'>
                   {message.content?.toString()}
                 </p>
-							</div>
-						))}
-					</div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>

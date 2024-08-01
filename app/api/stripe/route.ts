@@ -20,6 +20,10 @@ export async function GET(): Promise<NextResponse> {
 			where: { userId }
 		});
 
+		if (!userSubscription) {
+			return new NextResponse('Subscription record not found', { status: 404 });
+		}
+
 		if (userSubscription?.stripeCustomerId) {
 			const stripeSession = await stripe.billingPortal.sessions.create({
 				customer: userSubscription.stripeCustomerId,

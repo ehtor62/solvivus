@@ -13,12 +13,11 @@ interface SubscriptionButtonProps {
 export const SubscriptionButton = ({
 	isPro
 }: SubscriptionButtonProps) => {
-    const [loading, setLoading] = useState(false);
+	const [loading, setLoading] = useState(false);
 	const onClick = async () => {
 		try {
 			setLoading(true);
-			const response = await axios.get('/api/stripe');
-			
+			const response = await axios.get('/api/stripe')
 			window.location.href = response.data.url;
 		} catch (error) {
 			toast.error('Something went wrong.');
@@ -30,9 +29,10 @@ export const SubscriptionButton = ({
 
 	return (
 		<Button
-            disabled={loading}
-            variant={isPro ? 'default' : 'premium'}
-            onClick={() => {onClick();
+			disabled={loading}
+			variant={isPro ? 'default' : 'premium'}
+			onClick={() => {
+				onClick();
 			}}
 		>
 			{isPro ? 'Manage Subscription ' : 'Upgrade'}

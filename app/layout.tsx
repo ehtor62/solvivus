@@ -1,12 +1,12 @@
-import { ClerkProvider, SignInButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs'
+import { ClerkProvider } from '@clerk/nextjs'
 import './globals.css';
-import type {Metadata} from 'next'
-import {Inter} from 'next/font/google'
+import type { Metadata } from 'next'
+import { Inter } from 'next/font/google'
 import { ModalProvider } from '@/components/modal-provider';
 import { ToasterProvider } from '@/components/toaster-provider';
 import { CrispProvider } from '@/components/crisp-provider';
 
-const inter = Inter({subsets: ['latin']})
+const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: 'Solvivus',
@@ -20,6 +20,7 @@ export default function RootLayout({
 }) {
   return (
     <ClerkProvider>
+
       <html lang="en">
         <CrispProvider />
         <body className={inter.className}>
@@ -29,6 +30,7 @@ export default function RootLayout({
 
         </body>
       </html>
+
     </ClerkProvider>
   )
 }

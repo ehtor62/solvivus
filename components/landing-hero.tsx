@@ -11,12 +11,12 @@ export const LandingHero = (): React.ReactNode => {
 	return (
 		<div className='text-white font-bold py-40 text-center space-y-5'>
 			<div className='text-4xl sm:text-5xl md:text-6xl lg:text-7xl space-y-5 font-extrabold'>
-				<h1>The Best AI Tool for</h1>
+				<h1>AI Tools in your Pocket for</h1>
 				<div className='text-transparent leading-normal bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600'>
 					<TypewriterComponent
 						options={{
 							strings: [
-                                'Travel Guidance.',
+								'Travel Guidance.',
 								'AI Conversation.',
 								'Image Creation.',
 								'Music Generation.',
@@ -28,13 +28,13 @@ export const LandingHero = (): React.ReactNode => {
 					/>
 				</div>
 			</div>
-            <div className='text-sm md:text-xl font-light text-zinc-400'>
+			<div className='text-sm md:text-xl font-light text-zinc-400'>
 				Create content using AI 10x faster.
 			</div>
-            <div>
+			<div>
 				<Link href={isSignedIn ? '/dashboard' : '/sign-up'}>
 					<Button
-						
+
 						className='md:text-lg p-4 md:p-6 rounded-full font-semibold'
 					>
 						Start Generating For Free
@@ -42,7 +42,7 @@ export const LandingHero = (): React.ReactNode => {
 				</Link>
 
 			</div>
-            <div className='text-zinc-400 text-sm md:text-sm font-normal'>
+			<div className='text-zinc-400 text-sm md:text-sm font-normal'>
 				No credit card required.
 			</div>
 		</div>
